@@ -1,0 +1,8 @@
+vendor/
+node_modules/
+/storge/logs/*.log
+*.log
+.DS_Store
+Thumbs.db
+.vscode
+.env
