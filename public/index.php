@@ -6,7 +6,8 @@ require_once __DIR__ . '/../config/config.php';
 // Inițializează și încarcă variabilele din .env
 Dotenv\Dotenv::createImmutable(ROOT_DIR)->load();
 
-Core\Handler::start(); // Activează Debug
+// Activează Debug
+Core\Handler::start();
 
 // Pornim routerul
 Core\Router::dispatch();
