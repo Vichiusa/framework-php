@@ -53,7 +53,7 @@ class Router
         ];
     }
 
-    public static function dispatch()
+    public function dispatch()
     {
         // Încărcăm fișierul de rute
         require ROOT_DIR . 'routes/routes.php';
@@ -102,7 +102,7 @@ class Router
             if (self::$notFoundAction) {
                 return call_user_func(self::$notFoundAction);
             } else {
-                echo "404 Not Found";
+                return ["404 Not Found"];
             }
         }
     }

@@ -10,8 +10,7 @@ class Database
     private static $instance = null;
     private $pdo;
 
-    // Constructorul devine PRIVATE pentru a preveni instanțierea cu "new Database()" din exterior
-    private function __construct()
+    public function __construct()
     {
         // load db config
         $driver = $_ENV['DB_CONNECTION'] ?? 'mysql';

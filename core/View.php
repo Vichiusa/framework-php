@@ -2,41 +2,43 @@
 
 namespace Core;
 
+use Throwable;
+
 class View
 {
-    protected $content;
-
     public function render($view, $data = [])
     {
 
         // Calea către fișier
-        $viewFile = VIEWS_DIR . $view . '.tpl.php';
-        $layouts = VIEWS_DIR . 'layouts/default.php';
-        if (!file_exists($viewFile)) {
-            throw new \Exception("Fișierul view nu a fost găsit: {$viewFile}");
+        $__viewFile = VIEWS_DIR . $view . '.tpl.php';
+        $__layouts = VIEWS_DIR . 'layouts/default.php';
+        // Verificam daca exista fisierul si incarcam fisierul view
+        if (!is_file($__viewFile)) {
+            throw new \Exception("View inexistent: $view");
         }
 
         // Transformă cheile din array în variabile (ex: $data['title'] devine $title)
-        extract($data);
+        extract($data, EXTR_SKIP);
 
-        // Verificam daca exista fisierul si incarcam fisierul view
-
-        // pornim buffer
-        ob_start();
         try {
-            require $viewFile;
-            $this->content = ob_get_clean(); // capturam contentul in variabila
-        } catch (\Throwable $e) {
+            // pornim buffer
+            ob_start();
+            require $__viewFile;
+            $content = ob_get_clean(); // capturam contentul in variabila
+
+            //randam pagina cu loyauts daca avem si fara daca nu avem
+            if (file_exists($__layouts)) {
+                // pornim buffer
+                ob_start();
+                require $__layouts;
+                return ob_get_clean(); // capturam contentul in variabila;
+            }
+
+            return $content;
+        } catch (Throwable $e) {
             ob_end_clean();
             throw $e;
-        }
 
-        //randam pagina cu loyauts daca avem si fara daca nu avem
-        if (file_exists($layouts)) {
-            $content = $this->content;
-            require_once $layouts;
-        } else {
-            echo $this->content;
         }
     }
 }
